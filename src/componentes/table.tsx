@@ -2,23 +2,73 @@ import { useContext } from 'react';
 import dataContext from '../context/data-context';
 
 function Table() {
-  const { resultsFiltered, filters, setFilters } = useContext(dataContext);
+  const {
+    resultsFiltered,
+    filters,
+    setFilters,
+    onClickButtonFilter,
+  } = useContext(dataContext);
 
   return (
     <div>
-      { (resultsFiltered.length === 0) ? <p>Loading...</p> : null }
-      <h1>Star Wars</h1>
-      <label htmlFor="textFilter">procure pelo nome do planeta</label>
-      <input
-        type="text"
-        id="textFilter"
-        data-testid="name-filter"
-        value={ filters.name }
-        onChange={ (event) => {
-          const newFilterText = event.target.value;
-          setFilters({ ...filters, name: newFilterText });
-        } }
-      />
+      <div>
+        { (resultsFiltered.length === 0) ? <p>Loading...</p> : null }
+        <h1>Star Wars</h1>
+      </div>
+      <div>
+        <label htmlFor="textFilter">Procure pelo nome do planeta:</label>
+        <input
+          type="text"
+          id="textFilter"
+          data-testid="name-filter"
+          value={ filters.name }
+          onChange={ (event) => setFilters({ ...filters, name: event.target.value }) }
+        />
+      </div>
+      <div>
+        <br />
+        <select
+          id="columnFilter"
+          data-testid="column-filter"
+          value={ filters.columnSelected }
+          onChange={ (event) => setFilters({
+            ...filters, columnSelected: event.target.value }) }
+        >
+          <option value="population">population</option>
+          <option value="orbital_period">orbital_period</option>
+          <option value="diameter">diameter</option>
+          <option value="rotation_period">rotation_period</option>
+          <option value="surface_water">surface_water</option>
+        </select>
+        <select
+          id="comparisonFilter"
+          data-testid="comparison-filter"
+          value={ filters.comparisonSelected }
+          onChange={ (event) => setFilters({
+            ...filters, comparisonSelected: event.target.value }) }
+
+        >
+          <option value="maior que">maior que</option>
+          <option value="menor que">menor que</option>
+          <option value="igual a">igual a</option>
+        </select>
+        <input
+          type="number"
+          id="valueFilter"
+          data-testid="value-filter"
+          value={ filters.valueSelected }
+          onChange={ (event) => setFilters({
+            ...filters, valueSelected: Number(event.target.value) }) }
+        />
+        <button
+          data-testid="button-filter"
+          type="button"
+          onClick={ onClickButtonFilter }
+        >
+          filtrar
+        </button>
+      </div>
+      <br />
       <table>
         <thead>
           <tr>

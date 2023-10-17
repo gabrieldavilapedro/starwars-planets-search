@@ -1,7 +1,10 @@
 import { createContext } from 'react';
 
-type Filters = {
+export type Filters = {
   name: string;
+  columnSelected: string;
+  comparisonSelected: string;
+  valueSelected: number | string;
 };
 
 type DataContextType = {
@@ -9,6 +12,7 @@ type DataContextType = {
   resultsFiltered: any;
   filters: Filters;
   setFilters: (filters:Filters) => void;
+  onClickButtonFilter: () => void;
 };
 
 const dataContext = createContext<DataContextType>({} as DataContextType);

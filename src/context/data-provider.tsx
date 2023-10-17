@@ -1,15 +1,27 @@
 import { useState, useEffect } from 'react';
-import dataContext from './data-context';
+import dataContext, { Filters } from './data-context';
 import { getInfoStarWars } from '../services/chamaAPI';
 
 type Props = {
   children: React.ReactNode;
 };
 
+const filterName = (results: any[], name: string) => {
+  const tolower = name.toLowerCase();
+  return results.filter((result: any) => result.name
+    .toLowerCase()
+    .includes(tolower));
+};
+
 function DataProvider({ children }: Props) {
   const [results, setResults] = useState<any[]>([]);
   const [resultsFiltered, setResultsFiltered] = useState<any[]>(results);
-  const [filters, setFilters] = useState({ name: '' });
+  const [filters, setFilters] = useState<Filters>({
+    name: '',
+    columnSelected: 'population',
+    comparisonSelected: 'maior que',
+    valueSelected: '',
+  });
   useEffect(() => {
     async function fetchData() {
       const data = await getInfoStarWars();
@@ -19,20 +31,43 @@ function DataProvider({ children }: Props) {
   }, []);
 
   useEffect(() => {
-    // namefilter
-    const tolower = filters.name.toLowerCase();
-    const filter = results
-      .filter((result: any) => result.name
-        .toLowerCase()
-        .includes(tolower));
+    const filteredByName = filterName(results, filters.name);
 
-    // populationfilter
+    setResultsFiltered(filteredByName);
+  }, [filters.name, results]);
 
-    setResultsFiltered(filter);
-  }, [filters, results]);
+  function onClickButtonFilter() {
+    console.log(filters);
+    let list = filterName(results, filters.name);
 
+    list = list.filter((item: any) => {
+      const { comparisonSelected, valueSelected, columnSelected } = filters;
+      const itemValue = Number(item[columnSelected]);
+
+      switch (comparisonSelected) {
+        case 'maior que':
+          return itemValue > Number(valueSelected);
+        case 'menor que':
+          return itemValue < Number(valueSelected);
+        case 'igual a':
+          return itemValue === Number(valueSelected);
+        default:
+          return null;
+      }
+    });
+
+    setResultsFiltered(list);
+  }
+
+  const contextValue = {
+    results,
+    resultsFiltered,
+    filters,
+    setFilters,
+    onClickButtonFilter,
+  };
   return (
-    <dataContext.Provider value={ { results, resultsFiltered, filters, setFilters } }>
+    <dataContext.Provider value={ contextValue }>
       {children}
     </dataContext.Provider>
   );
