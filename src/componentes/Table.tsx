@@ -6,13 +6,17 @@ function Table() {
     resultsFiltered,
     filters,
     setFilters,
+    filteredName,
+    setFilteredName,
     onClickButtonFilter,
   } = useContext(dataContext);
 
+  if (!resultsFiltered.length) {
+    return <h1>loading...</h1>;
+  }
   return (
     <div>
       <div>
-        { (resultsFiltered.length === 0) ? <p>Loading...</p> : null }
         <h1>Star Wars</h1>
       </div>
       <div>
@@ -21,8 +25,8 @@ function Table() {
           type="text"
           id="textFilter"
           data-testid="name-filter"
-          value={ filters.name }
-          onChange={ (event) => setFilters({ ...filters, name: event.target.value }) }
+          value={ filteredName }
+          onChange={ (event) => setFilteredName(event.target.value) }
         />
       </div>
       <div>
@@ -52,14 +56,16 @@ function Table() {
           <option value="menor que">menor que</option>
           <option value="igual a">igual a</option>
         </select>
-        <input
-          type="number"
-          id="valueFilter"
-          data-testid="value-filter"
-          value={ filters.valueSelected }
-          onChange={ (event) => setFilters({
-            ...filters, valueSelected: Number(event.target.value) }) }
-        />
+        <label htmlFor="valueFilter">
+          <input
+            type="number"
+            id="valueFilter"
+            data-testid="value-filter"
+            value={ filters.valueSelected }
+            onChange={ (event) => setFilters({
+              ...filters, valueSelected: event.target.value }) }
+          />
+        </label>
         <button
           data-testid="button-filter"
           type="button"
