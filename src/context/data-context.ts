@@ -1,8 +1,14 @@
 import { createContext } from 'react';
 
+type Filters = {
+  name: string;
+};
+
 type DataContextType = {
   results: any;
-  filterInput: (filterText: string) => void;
+  resultsFiltered: any;
+  filters: Filters;
+  setFilters: (filters:Filters) => void;
 };
 
 const dataContext = createContext<DataContextType>({} as DataContextType);

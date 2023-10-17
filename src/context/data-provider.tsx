@@ -8,16 +8,8 @@ type Props = {
 
 function DataProvider({ children }: Props) {
   const [results, setResults] = useState<any[]>([]);
-
-  const filterInput = (filterText: string) => {
-    const tolower = filterText.toLowerCase();
-    const filter = results
-      .filter((result: any) => result.name
-        .toLowerCase()
-        .includes(tolower));
-    setResults(filter);
-  };
-
+  const [resultsFiltered, setResultsFiltered] = useState<any[]>(results);
+  const [filters, setFilters] = useState({ name: '' });
   useEffect(() => {
     async function fetchData() {
       const data = await getInfoStarWars();
@@ -26,8 +18,21 @@ function DataProvider({ children }: Props) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // namefilter
+    const tolower = filters.name.toLowerCase();
+    const filter = results
+      .filter((result: any) => result.name
+        .toLowerCase()
+        .includes(tolower));
+
+    // populationfilter
+
+    setResultsFiltered(filter);
+  }, [filters, results]);
+
   return (
-    <dataContext.Provider value={ { results, filterInput } }>
+    <dataContext.Provider value={ { results, resultsFiltered, filters, setFilters } }>
       {children}
     </dataContext.Provider>
   );

@@ -1,30 +1,22 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import dataContext from '../context/data-context';
 
 function Table() {
-  const { results, filterInput } = useContext(dataContext);
-  const [resultsFiltered, setResultsFiltered] = useState<any[]>(results);
-  const [filterText, setFilterText] = useState('');
+  const { resultsFiltered, filters, setFilters } = useContext(dataContext);
 
-  useEffect(
-    () => {
-      setResultsFiltered(results);
-    },
-    [results],
-  );
   return (
     <div>
-      { (results.length === 0) ? <p>Loading...</p> : null }
+      { (resultsFiltered.length === 0) ? <p>Loading...</p> : null }
       <h1>Star Wars</h1>
       <label htmlFor="textFilter">procure pelo nome do planeta</label>
       <input
         type="text"
         id="textFilter"
         data-testid="name-filter"
-        value={ filterText }
+        value={ filters.name }
         onChange={ (event) => {
-          setFilterText(event.target.value);
-          filterInput(filterText);
+          const newFilterText = event.target.value;
+          setFilters({ ...filters, name: newFilterText });
         } }
       />
       <table>
