@@ -1,12 +1,20 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import dataContext from '../context/data-context';
 
 function Table() {
-  const { results } = useContext(dataContext);
+  const { results, filterInput } = useContext(dataContext);
+  const [resultsFiltered, setResultsFiltered] = useState<any[]>(results);
   const [filterText, setFilterText] = useState('');
 
+  useEffect(
+    () => {
+      setResultsFiltered(results);
+    },
+    [results],
+  );
   return (
     <div>
+      { (results.length === 0) ? <p>Loading...</p> : null }
       <h1>Star Wars</h1>
       <label htmlFor="textFilter">procure pelo nome do planeta</label>
       <input
@@ -14,7 +22,10 @@ function Table() {
         id="textFilter"
         data-testid="name-filter"
         value={ filterText }
-        onChange={ (event) => setFilterText(event.target.value) }
+        onChange={ (event) => {
+          setFilterText(event.target.value);
+          filterInput(filterText);
+        } }
       />
       <table>
         <thead>
@@ -35,7 +46,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {results.map((result: any) => (
+          {resultsFiltered.map((result: any) => (
             <tr key={ result.name }>
               <td>{result.name}</td>
               <td>{result.rotation_period}</td>
