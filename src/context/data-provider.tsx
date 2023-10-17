@@ -10,6 +10,7 @@ function DataProvider({ children }: Props) {
   const [filteredName, setFilteredName] = useState<string>('');
   const [results, setResults] = useState<any[]>([]);
   const [resultsFiltered, setResultsFiltered] = useState<any[]>(results);
+  const [filterList, setFilterList] = useState<Filters[]>([]);
   const [filters, setFilters] = useState<Filters>({
     columnSelected: 'population',
     comparisonSelected: 'maior que',
@@ -38,7 +39,7 @@ function DataProvider({ children }: Props) {
   }, [filteredName]);
 
   function onClickButtonFilter() {
-    console.log(filters);
+    setFilterList([...filterList, filters]);
 
     const result = resultsFiltered.filter((item: any) => {
       const { comparisonSelected, valueSelected, columnSelected } = filters;
@@ -57,15 +58,30 @@ function DataProvider({ children }: Props) {
     setResultsFiltered(result);
   }
 
+  function onClickButtonRemoveAll() {
+    setFilterList([]);
+    setResultsFiltered(results);
+  }
+
+  function onClickButtonRemove(filter: any) {
+    const newList = filterList.filter((item) => item !== filter);
+    setFilterList(newList);
+    setResultsFiltered(results);
+  }
+
   const contextValue = useMemo(() => ({
     results,
     resultsFiltered,
     filters,
-    setFilters,
-    onClickButtonFilter,
     filteredName,
+    filterList,
+    setFilters,
     setFilteredName,
-  }), [results, resultsFiltered, filters, filteredName]);
+    setFilterList,
+    onClickButtonFilter,
+    onClickButtonRemoveAll,
+    onClickButtonRemove,
+  }), [results, resultsFiltered, filters, filteredName, filterList]);
   return (
     <dataContext.Provider value={ contextValue }>
       {children}

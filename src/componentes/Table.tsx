@@ -5,10 +5,13 @@ function Table() {
   const {
     resultsFiltered,
     filters,
-    setFilters,
     filteredName,
+    filterList,
+    setFilters,
     setFilteredName,
     onClickButtonFilter,
+    onClickButtonRemoveAll,
+    onClickButtonRemove,
   } = useContext(dataContext);
 
   if (!resultsFiltered.length) {
@@ -73,6 +76,32 @@ function Table() {
         >
           filtrar
         </button>
+        <div>
+          {filterList.map((filter: any) => (
+            <div key={ filter.columnSelected }>
+              <p>
+                {`${filter.columnSelected} 
+              ${filter.comparisonSelected} 
+              ${filter.valueSelected}`}
+                <button
+                  onClick={
+                  () => onClickButtonRemove(filter)
+                }
+                >
+                  🗑️
+                </button>
+              </p>
+            </div>
+          ))}
+          {filterList.length === 0
+            ? null
+            : <button
+                onClick={ () => onClickButtonRemoveAll() }
+            >
+              Remove todos os filtros🗑️
+            </button>}
+
+        </div>
       </div>
       <br />
       <table>
