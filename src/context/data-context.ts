@@ -3,7 +3,7 @@ import { createContext } from 'react';
 export type Filters = {
   columnSelected: string;
   comparisonSelected: string;
-  valueSelected: number | string;
+  valueSelected: string;
 };
 
 type DataContextType = {
