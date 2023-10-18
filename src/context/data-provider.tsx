@@ -11,11 +11,7 @@ function DataProvider({ children }: Props) {
   const [results, setResults] = useState<any[]>([]);
   const [resultsFiltered, setResultsFiltered] = useState<any[]>(results);
   const [filterList, setFilterList] = useState<Filters[]>([]);
-  const [filters, setFilters] = useState<Filters>({
-    columnSelected: 'population',
-    comparisonSelected: 'maior que',
-    valueSelected: '0',
-  });
+
   useEffect(() => {
     async function fetchData() {
       const data = await getInfoStarWars();
@@ -38,7 +34,7 @@ function DataProvider({ children }: Props) {
     setResultsFiltered(filteredByName);
   }, [filteredName]);
 
-  function onClickButtonFilter() {
+  function onSubmitForm(filters: Filters) {
     setFilterList([...filterList, filters]);
 
     const result = resultsFiltered.filter((item: any) => {
@@ -72,16 +68,14 @@ function DataProvider({ children }: Props) {
   const contextValue = useMemo(() => ({
     results,
     resultsFiltered,
-    filters,
     filteredName,
     filterList,
-    setFilters,
     setFilteredName,
     setFilterList,
-    onClickButtonFilter,
+    onSubmitForm,
     onClickButtonRemoveAll,
     onClickButtonRemove,
-  }), [results, resultsFiltered, filters, filteredName, filterList]);
+  }), [results, resultsFiltered, filteredName, filterList]);
   return (
     <dataContext.Provider value={ contextValue }>
       {children}

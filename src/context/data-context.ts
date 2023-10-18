@@ -9,13 +9,11 @@ export type Filters = {
 type DataContextType = {
   results: any;
   resultsFiltered: any;
-  filters: Filters;
   filteredName: string;
   filterList: Filters[];
-  setFilters: (filters:Filters) => void;
   setFilteredName: (name:string) => void;
   setFilterList: (filterList:Filters[]) => void;
-  onClickButtonFilter: () => void;
+  onSubmitForm: (filters: Filters) => void;
   onClickButtonRemoveAll: () => void;
   onClickButtonRemove: (index:number) => void;
 };

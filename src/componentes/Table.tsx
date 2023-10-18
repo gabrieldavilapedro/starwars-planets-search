@@ -4,14 +4,12 @@ import dataContext from '../context/data-context';
 function Table() {
   const {
     resultsFiltered,
-    filters,
     filteredName,
     filterList,
-    setFilters,
     setFilteredName,
-    onClickButtonFilter,
     onClickButtonRemoveAll,
     onClickButtonRemove,
+    onSubmitForm,
   } = useContext(dataContext);
 
   const filterNameList = [
@@ -32,79 +30,88 @@ function Table() {
       <div>
         <h1>Star Wars</h1>
       </div>
-      <div>
-        <label htmlFor="textFilter">Procure pelo nome do planeta:</label>
-        <input
-          type="text"
-          id="textFilter"
-          data-testid="name-filter"
-          value={ filteredName }
-          onChange={ (event) => setFilteredName(event.target.value) }
-        />
-      </div>
-      <div>
-        <br />
-        <select
-          id="columnFilter"
-          data-testid="column-filter"
-          value={ filters.columnSelected }
-          onChange={ (event) => setFilters({
-            ...filters, columnSelected: event.target.value }) }
-        >
-          {filterNameList.map((filterName) => (
-            <option key={ filterName } value={ filterName }>
-              {filterName}
-            </option>
-          ))}
-        </select>
-        <select
-          id="comparisonFilter"
-          data-testid="comparison-filter"
-          value={ filters.comparisonSelected }
-          onChange={ (event) => setFilters({
-            ...filters, comparisonSelected: event.target.value }) }
-        >
-          <option value="maior que">maior que</option>
-          <option value="menor que">menor que</option>
-          <option value="igual a">igual a</option>
-        </select>
-        <label htmlFor="valueFilter">
-          <input
-            type="number"
-            id="valueFilter"
-            data-testid="value-filter"
-            value={ filters.valueSelected }
-            onChange={ (event) => setFilters({
-              ...filters, valueSelected: event.target.value }) }
-          />
-        </label>
-        <button
-          data-testid="button-filter"
-          type="button"
-          onClick={ onClickButtonFilter }
-        >
-          filtrar
-        </button>
+      <form
+        onSubmit={ (e) => {
+          e.preventDefault();
+          const form = e.target as HTMLFormElement;
+          const columnfilter = form
+            .elements.namedItem('columnFilter') as HTMLSelectElement;
+          const comparisonfilter = form
+            .elements.namedItem('comparisonFilter') as HTMLSelectElement;
+          const valuefilter = form
+            .elements.namedItem('valueFilter') as HTMLInputElement;
+          onSubmitForm({
+            columnSelected: columnfilter?.value || '',
+            comparisonSelected: comparisonfilter?.value || '',
+            valueSelected: valuefilter?.value || '',
+          });
+        } }
+      >
         <div>
-          {filterList.map((filter: any) => (
-            <div key={ filter.columnSelected }>
-              <p>
-                {`${filter.columnSelected} 
+          <label htmlFor="textFilter">Procure pelo nome do planeta:</label>
+          <input
+            type="text"
+            id="textFilter"
+            data-testid="name-filter"
+            value={ filteredName }
+            onChange={ (event) => setFilteredName(event.target.value) }
+          />
+        </div>
+        <div>
+          <br />
+          <select
+            id="columnFilter"
+            data-testid="column-filter"
+          >
+            {filterNameList.map((filterName) => (
+              <option key={ filterName } value={ filterName }>
+                {filterName}
+              </option>
+            ))}
+          </select>
+          <select
+            id="comparisonFilter"
+            data-testid="comparison-filter"
+          >
+            <option value="maior que">maior que</option>
+            <option value="menor que">menor que</option>
+            <option value="igual a">igual a</option>
+          </select>
+          <label htmlFor="valueFilter">
+            <input
+              type="number"
+              id="valueFilter"
+              data-testid="value-filter"
+              defaultValue="0"
+            />
+          </label>
+          <button
+            data-testid="button-filter"
+            type="submit"
+          >
+            filtrar
+          </button>
+          <div>
+            {filterList.map((filter: any) => (
+              <div key={ filter.columnSelected }>
+                <p>
+                  {`${filter.columnSelected} 
               ${filter.comparisonSelected} 
               ${filter.valueSelected}`}
-                <button
-                  onClick={
+                  <button
+                    onClick={
                   () => onClickButtonRemove(filter)
                 }
-                >
-                  🗑️
-                </button>
-              </p>
-            </div>
-          ))}
-          {filterList.length === 0 ? null : clearFiltersButton}
+                  >
+                    🗑️
+                  </button>
+                </p>
+              </div>
+            ))}
+            {filterList.length === 0 ? null : clearFiltersButton}
+          </div>
         </div>
-      </div>
+      </form>
       <br />
       <table>
         <thead>
