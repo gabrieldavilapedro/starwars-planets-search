@@ -6,15 +6,18 @@ export type Filters = {
   valueSelected: string;
 };
 
+export type Sort = {
+  columnSelected: string;
+  orderSelected: string;
+};
+
 type DataContextType = {
   resultsFiltered: any;
   filteredName: string;
   filterList: Filters[];
+  setSort: (sort:Sort) => void;
   setFilteredName: (name:string) => void;
   setFilterList: (filterList:Filters[]) => void;
-  onSubmitForm: (filters: Filters) => void;
-  onClickButtonRemoveAll: () => void;
-  onClickButtonRemove: (colunmSelected: string) => void;
 };
 
 const dataContext = createContext<DataContextType>({} as DataContextType);
