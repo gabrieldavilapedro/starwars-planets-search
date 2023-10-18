@@ -7,7 +7,6 @@ export type Filters = {
 };
 
 type DataContextType = {
-  results: any;
   resultsFiltered: any;
   filteredName: string;
   filterList: Filters[];
@@ -15,7 +14,7 @@ type DataContextType = {
   setFilterList: (filterList:Filters[]) => void;
   onSubmitForm: (filters: Filters) => void;
   onClickButtonRemoveAll: () => void;
-  onClickButtonRemove: (index:number) => void;
+  onClickButtonRemove: (colunmSelected: string) => void;
 };
 
 const dataContext = createContext<DataContextType>({} as DataContextType);

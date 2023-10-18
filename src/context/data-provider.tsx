@@ -32,15 +32,15 @@ function DataProvider({ children }: Props) {
     const filteredByName = filterName(results, filteredName);
 
     setResultsFiltered(filteredByName);
-  }, [filteredName]);
+  }, [filteredName, results]);
 
-  function onSubmitForm(filters: Filters) {
-    setFilterList([...filterList, filters]);
+  useEffect(() => {
+    // para cada planeta, testa se ele passa em todos os filtros
+    const testPlanet = (planet: any, filter: Filters) => {
+      const { comparisonSelected,
+        valueSelected, columnSelected: filterColumnSelected } = filter;
 
-    const result = resultsFiltered.filter((item: any) => {
-      const { comparisonSelected, valueSelected, columnSelected } = filters;
-      const itemValue = Number(item[columnSelected]);
-
+      const itemValue = Number(planet[filterColumnSelected]);
       switch (comparisonSelected) {
         case 'maior que':
           return itemValue > Number(valueSelected);
@@ -49,24 +49,29 @@ function DataProvider({ children }: Props) {
         default:
           return itemValue === Number(valueSelected);
       }
+    };
+    const newResultsFiltered = results.filter((planet) => {
+      // para cada filter da lista de filters, testa se cada planeta passa em todos os filtros
+      return filterList.every((filter) => testPlanet(planet, filter));
     });
 
-    setResultsFiltered(result);
+    setResultsFiltered(newResultsFiltered);
+  }, [filterList, results]);
+
+  function onSubmitForm(filters: Filters) {
+    setFilterList([...filterList, filters]);
   }
 
   function onClickButtonRemoveAll() {
     setFilterList([]);
-    setResultsFiltered(results);
   }
 
-  function onClickButtonRemove(filter: any) {
-    const newList = filterList.filter((item) => item !== filter);
+  function onClickButtonRemove(columnSelected: string) {
+    const newList = filterList.filter((item) => item.columnSelected !== columnSelected);
     setFilterList(newList);
-    setResultsFiltered(results);
   }
 
   const contextValue = useMemo(() => ({
-    results,
     resultsFiltered,
     filteredName,
     filterList,

@@ -19,7 +19,13 @@ function Table() {
   );
 
   const clearFiltersButton = (
-    <button onClick={ () => onClickButtonRemoveAll() }>Remove todos os filtros🗑️</button>
+    <button
+      data-testid="button-remove-filters"
+      onClick={ () => onClickButtonRemoveAll() }
+    >
+      Remove todos os filtros🗑️
+
+    </button>
   );
 
   if (!resultsFiltered.length) {
@@ -91,27 +97,27 @@ function Table() {
           >
             filtrar
           </button>
-          <div>
-            {filterList.map((filter: any) => (
-              <div key={ filter.columnSelected }>
-                <p>
-                  {`${filter.columnSelected} 
-              ${filter.comparisonSelected} 
-              ${filter.valueSelected}`}
-                  <button
-                    onClick={
-                  () => onClickButtonRemove(filter)
-                }
-                  >
-                    🗑️
-                  </button>
-                </p>
-              </div>
-            ))}
-            {filterList.length === 0 ? null : clearFiltersButton}
-          </div>
         </div>
       </form>
+      <div>
+        {filterList.map((filter: any) => (
+          <div key={ filter.columnSelected }>
+            <p data-testid="filter">
+              {`${filter.columnSelected} 
+              ${filter.comparisonSelected} 
+              ${filter.valueSelected}`}
+              <button
+                onClick={
+                  () => onClickButtonRemove(filter.columnSelected)
+                }
+              >
+                🗑️
+              </button>
+            </p>
+          </div>
+        ))}
+        {filterList.length === 0 ? null : clearFiltersButton}
+      </div>
       <br />
       <table>
         <thead>
