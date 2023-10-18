@@ -14,6 +14,16 @@ function Table() {
     onClickButtonRemove,
   } = useContext(dataContext);
 
+  const filterNameList = [
+    'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
+  ].filter(
+    (item: string) => !filterList.find((filter) => filter.columnSelected === item),
+  );
+
+  const clearFiltersButton = (
+    <button onClick={ () => onClickButtonRemoveAll() }>Remove todos os filtros🗑️</button>
+  );
+
   if (!resultsFiltered.length) {
     return <h1>loading...</h1>;
   }
@@ -41,11 +51,11 @@ function Table() {
           onChange={ (event) => setFilters({
             ...filters, columnSelected: event.target.value }) }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {filterNameList.map((filterName) => (
+            <option key={ filterName } value={ filterName }>
+              {filterName}
+            </option>
+          ))}
         </select>
         <select
           id="comparisonFilter"
@@ -53,7 +63,6 @@ function Table() {
           value={ filters.comparisonSelected }
           onChange={ (event) => setFilters({
             ...filters, comparisonSelected: event.target.value }) }
-
         >
           <option value="maior que">maior que</option>
           <option value="menor que">menor que</option>
@@ -93,14 +102,7 @@ function Table() {
               </p>
             </div>
           ))}
-          {filterList.length === 0
-            ? null
-            : <button
-                onClick={ () => onClickButtonRemoveAll() }
-            >
-              Remove todos os filtros🗑️
-            </button>}
-
+          {filterList.length === 0 ? null : clearFiltersButton}
         </div>
       </div>
       <br />
