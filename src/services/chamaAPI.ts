@@ -7,7 +7,6 @@ export const getInfoStarWars = async () => {
 
     return apiResponse.results;
   } catch (error) {
-    console.error(error);
     return [];
   }
 };

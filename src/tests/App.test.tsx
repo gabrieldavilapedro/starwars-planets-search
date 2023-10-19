@@ -1,16 +1,40 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import Table from '../componentes/Table';
-import { vi } from 'vitest';
-import testData from '../mocks/mockAPI';
+import { describe, vi } from 'vitest';
+import testData from './mocks/mockAPI';
+import DataProvider from '../context/data-provider';
 
 
 
+const MOCK_API = testData
+
+const MOCK_RESPOSE = {
+  ok: true,
+  status: 200,
+  json: async () => MOCK_API,
+} as Response;
+
+const mockFetch = () => { global.fetch = vi.fn(() => Promise.resolve(MOCK_RESPOSE)) as any; };
+const mockFetchError = () => { global.fetch = vi.fn(() => { throw new Error("Erro") }) };
+const clearAllMocks = (() => vi.clearAllMocks());
+
+describe('Teste da aplicacao em caso de erro da API', () => {
+  beforeEach(mockFetchError)
+  afterEach(cleanup)
+  test('Verifica se a tabela é renderizada sem itens', async () => {
+    render(<DataProvider><App /></DataProvider>);
+    // verifica se não tem nenhum td na tabela
+    const td = screen.queryByTestId('planet-name');
+    expect(td).not.toBeInTheDocument();
+  });
+});
 
 describe('Teste da aplicacao', () => {
-
+  beforeEach(mockFetch)
+  afterEach(cleanup)
 
   afterEach(() => vi.clearAllMocks());
   test('Verifica se o partes do componente é renderizado', () => {
@@ -44,35 +68,41 @@ describe('Teste da aplicacao', () => {
     expect(table).toBeInTheDocument();
   });
   test('Verifica se a tabela é filtrada corretamente ao click do botao de filtrar', async () => {
-    const MOCK_API = testData
 
-    const MOCK_RESPOSE = {
-      ok: true,
-      status: 200,
-      json: async () => MOCK_API,
-    } as Response;
-
-    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MOCK_RESPOSE);
-
-    render(<App />);
+    render(<DataProvider><App /></DataProvider>);
 
     const planetA = await screen.findByText('Tatooine');
 
-    // const botaoFiltrar = screen.getByRole('button', { name: 'filtrar' });
+    const botaoFiltrar = screen.getByRole('button', { name: 'filtrar' });
 
-    // userEvent.click(botaoFiltrar);
-    // // getByText('Tatooine');
-    // const planetB = await screen.findByText('Alderaan');
-    // const planetC = await screen.findByText('Yavin IV');
-    // const planetD = await screen.findByText('Hoth');
-    // const planetE = await screen.findByText('Dagobah');
+    await userEvent.click(botaoFiltrar);
+    const planetB = screen.getByText('Alderaan');
+    const planetC = screen.getByText('Yavin IV');
+    const planetD = screen.queryByText('Hoth');
+    const planetE = screen.queryByText('Dagobah');
 
+    expect(planetA).toBeInTheDocument();
+    expect(planetB).toBeInTheDocument();
+    expect(planetC).toBeInTheDocument();
+    expect(planetD).not.toBeInTheDocument();
+    expect(planetE).not.toBeInTheDocument();
 
-    // expect(planetA).toBeInTheDocument();
-    // expect(planetB).toBeInTheDocument();
-    // expect(planetC).toBeInTheDocument();
-    // expect(planetD).not.toBeInTheDocument();
-    // expect(planetE).not.toBeInTheDocument();
+    const p = screen.getByTestId('filter');
+    const botaoRemoverFiltro = screen.getByRole('button', { name: '🗑️' });
+    const botaoRemoveFiltroAll = screen.getByRole('button', { name: 'Remove todos os filtros🗑️' });
+
+    expect(p).toBeInTheDocument();
+    expect(botaoRemoverFiltro).toBeInTheDocument();
+    expect(botaoRemoveFiltroAll).toBeInTheDocument();
+
+  });
+  test('Verifica se a tabela é ordenada corretamente ao click do botao de ordenar', async () => {
+    render(<DataProvider><App /></DataProvider>);
+
+    const butaoOrdenar = screen.getByRole('button', { name: 'sort' });
+    await userEvent.click(butaoOrdenar);
+
+    
 
   });
 });
