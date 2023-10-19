@@ -14,7 +14,8 @@ function Table() {
   const filterNameList = [
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
   const novafilterNameList = filterNameList.filter(
-    (item: string) => !filterList.find((filter) => filter.columnSelected === item),
+    (item: string) => !Array.isArray(filterList) || !filterList.find((filter) => filter
+      .columnSelected === item),
   );
 
   const clearFiltersButton = (
@@ -27,13 +28,10 @@ function Table() {
     </button>
   );
 
-  if (!resultsFiltered.length) {
-    return <h1>loading...</h1>;
-  }
   return (
     <div>
       <div>
-        <h1>Star Wars</h1>
+        <h1 id="title">Star Wars</h1>
       </div>
       <form
         onSubmit={ (e) => {
@@ -50,7 +48,9 @@ function Table() {
             comparisonSelected: comparisonfilter?.value || '',
             valueSelected: valuefilter?.value || '',
           });
-          setFilterList([...filterList, filter]);
+          if (Array.isArray(filterList)) {
+            setFilterList([...filterList, filter]);
+          }
         } }
       >
         <div>
@@ -149,7 +149,7 @@ function Table() {
       </form>
 
       <div>
-        {filterList.map((filter: any) => (
+        {Array.isArray(filterList) && filterList.map((filter: any) => (
           <div key={ filter.columnSelected }>
             <p data-testid="filter">
               {`${filter.columnSelected} 
@@ -167,10 +167,10 @@ function Table() {
             </p>
           </div>
         ))}
-        {filterList.length === 0 ? null : clearFiltersButton}
+        {filterList?.length === 0 ? null : clearFiltersButton}
       </div>
       <br />
-      <table>
+      <table data-testid="table">
         <thead>
           <tr>
             <th>Name</th>
@@ -189,7 +189,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {resultsFiltered.map((result: any) => (
+          {resultsFiltered?.map((result: any) => (
             <tr key={ result.name }>
               <td data-testid="planet-name">{result.name}</td>
               <td>{result.rotation_period}</td>

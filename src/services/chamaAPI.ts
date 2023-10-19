@@ -3,6 +3,7 @@ export const getInfoStarWars = async () => {
   try {
     const response = await fetch(URL);
     const apiResponse = await response.json();
+    console.log(apiResponse.results);
 
     return apiResponse.results;
   } catch (error) {
