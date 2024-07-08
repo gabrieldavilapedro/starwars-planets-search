@@ -94,7 +94,6 @@ describe('Teste da aplicacao', () => {
     expect(p).toBeInTheDocument();
     expect(botaoRemoverFiltro).toBeInTheDocument();
     expect(botaoRemoveFiltroAll).toBeInTheDocument();
-
   });
   test('Verifica se a tabela é ordenada corretamente ao click do botao de ordenar', async () => {
     render(<DataProvider><App /></DataProvider>);
@@ -102,7 +101,7 @@ describe('Teste da aplicacao', () => {
     const butaoOrdenar = screen.getByRole('button', { name: 'sort' });
     await userEvent.click(butaoOrdenar);
 
-    
-
+    const primeiroItemDaTabela = screen.getByRole('cell', { name: 'Alderaan' });
+    expect(primeiroItemDaTabela).toHaveTextContent('Alderaan');
   });
 });
