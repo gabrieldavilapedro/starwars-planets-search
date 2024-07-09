@@ -78,7 +78,7 @@ form select:focus:hover {
   background-color: transparent;
   color: white;
   display: flex;
-  flex-direction: row; /* Faz com que os elementos fiquem na horizontal */
+  flex-direction: row;
   gap: 10px;
   justify-content: center;
 }

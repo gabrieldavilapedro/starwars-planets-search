@@ -1,4 +1,3 @@
-import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
@@ -6,8 +5,6 @@ import Table from '../componentes/Table';
 import { describe, vi } from 'vitest';
 import testData from './mocks/mockAPI';
 import DataProvider from '../context/data-provider';
-
-
 
 const MOCK_API = testData
 
@@ -19,7 +16,6 @@ const MOCK_RESPOSE = {
 
 const mockFetch = () => { global.fetch = vi.fn(() => Promise.resolve(MOCK_RESPOSE)) as any; };
 const mockFetchError = () => { global.fetch = vi.fn(() => { throw new Error("Erro") }) };
-const clearAllMocks = (() => vi.clearAllMocks());
 
 describe('Teste da aplicacao em caso de erro da API', () => {
   beforeEach(mockFetchError)
@@ -88,8 +84,8 @@ describe('Teste da aplicacao', () => {
     expect(planetE).not.toBeInTheDocument();
 
     const p = screen.getByTestId('filter');
-    const botaoRemoverFiltro = screen.getByRole('button', { name: '🗑️' });
-    const botaoRemoveFiltroAll = screen.getByRole('button', { name: 'Remove todos os filtros🗑️' });
+    const botaoRemoverFiltro = screen.getByRole('button', { name: 'Remover filtro' });
+    const botaoRemoveFiltroAll = screen.getByRole('button', { name: 'Remove todos os filtros' });
 
     expect(p).toBeInTheDocument();
     expect(botaoRemoverFiltro).toBeInTheDocument();
