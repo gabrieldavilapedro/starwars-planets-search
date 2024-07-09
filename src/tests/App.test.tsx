@@ -17,10 +17,10 @@ const MOCK_RESPOSE = {
 const mockFetch = () => { global.fetch = vi.fn(() => Promise.resolve(MOCK_RESPOSE)) as any; };
 const mockFetchError = () => { global.fetch = vi.fn(() => { throw new Error("Erro") }) };
 
-describe('Teste da aplicacao em caso de erro da API', () => {
+describe('test the application in case of API error', () => {
   beforeEach(mockFetchError)
   afterEach(cleanup)
-  test('Verifica se a tabela é renderizada sem itens', async () => {
+  test('Checks if the table is rendered without items', async () => {
     render(<DataProvider><App /></DataProvider>);
     // verifica se não tem nenhum td na tabela
     const td = screen.queryByTestId('planet-name');
@@ -28,12 +28,12 @@ describe('Teste da aplicacao em caso de erro da API', () => {
   });
 });
 
-describe('Teste da aplicacao', () => {
+describe('Application testing', () => {
   beforeEach(mockFetch)
   afterEach(cleanup)
 
   afterEach(() => vi.clearAllMocks());
-  test('Verifica se o partes do componente é renderizado', () => {
+  test('Checks if the component renders correctly', () => {
     render(<Table />);
     const title = screen.getByText(/Star Wars/i);
     expect(title).toBeInTheDocument();
@@ -63,7 +63,7 @@ describe('Teste da aplicacao', () => {
     const table = screen.getByTestId('table');
     expect(table).toBeInTheDocument();
   });
-  test('Verifica se a tabela é filtrada corretamente ao click do botao de filtrar', async () => {
+  test('Checks if the table is filtered correctly', async () => {
 
     render(<DataProvider><App /></DataProvider>);
 
@@ -91,7 +91,7 @@ describe('Teste da aplicacao', () => {
     expect(botaoRemoverFiltro).toBeInTheDocument();
     expect(botaoRemoveFiltroAll).toBeInTheDocument();
   });
-  test('Verifica se a tabela é ordenada corretamente ao click do botao de ordenar', async () => {
+  test('Checks if the table is sorted correctly', async () => {
     render(<DataProvider><App /></DataProvider>);
 
     const butaoOrdenar = screen.getByRole('button', { name: 'sort' });
