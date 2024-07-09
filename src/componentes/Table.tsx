@@ -23,7 +23,7 @@ function Table() {
       data-testid="button-remove-filters"
       onClick={() => setFilterList([])}
     >
-      Remove todos os filtros🗑️
+      Remove todos os filtros
 
     </button>
   );
@@ -98,6 +98,7 @@ function Table() {
             <button
               data-testid="button-filter"
               type="submit"
+              disabled={novafilterNameList.length === 0}
             >
               filtrar
             </button>
@@ -151,28 +152,27 @@ function Table() {
               </button>
             </div>
           </form>
-          <div>
-          </div>
-          {Array.isArray(filterList) && filterList.map((filter: any) => (
-            <div key={filter.columnSelected}>
-              <p data-testid="filter">
-                {`${filter.columnSelected} 
+          <div className='filter'>
+            {Array.isArray(filterList) && filterList.map((filter: any) => (
+              <div key={filter.columnSelected}>
+                <p data-testid="filter">
+                  {`${filter.columnSelected} 
               ${filter.comparisonSelected} 
               ${filter.valueSelected}`}
-                <button
-                  onClick={() => {
-                    const newList = filterList
-                      .filter((item) => item.columnSelected !== filter.columnSelected);
-                    setFilterList(newList);
-                  }}
-                >
-                  🗑️
-                </button>
-              </p>
-            </div>
-          ))}
-          {filterList?.length === 0 ? null : clearFiltersButton}
-
+                  <button
+                    onClick={() => {
+                      const newList = filterList
+                        .filter((item) => item.columnSelected !== filter.columnSelected);
+                      setFilterList(newList);
+                    }}
+                  >
+                    Remover filtro
+                  </button>
+                </p>
+              </div>
+            ))}
+            {filterList?.length === 0 ? null : clearFiltersButton}
+          </div>
         </div >
         <br />
         <div className='table-container'>

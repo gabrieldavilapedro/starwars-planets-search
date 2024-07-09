@@ -7,6 +7,42 @@ body {
   text-align: center;
 }
 
+form {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 5px;
+  padding: 5px;
+}
+
+form input {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 10px;
+}
+
+form select {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  gap: 10px;
+}
+
+button {
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+}
+
+form select:focus:hover {
+  background-color: white;
+  color: rgb(7, 7, 7);
+}
+
 .App {
   text-align: center;
 }
@@ -29,44 +65,22 @@ body {
   align-items: center;
   color: white;
   display: flex;
-  font-size: 6.5em;
+  font-size: 5.5em;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 97px;
 }
 
 .search {
   margin: 5px;
 }
 
-form {
+.filter {
+  background-color: transparent;
+  color: white;
   display: flex;
+  flex-direction: row; /* Faz com que os elementos fiquem na horizontal */
   gap: 10px;
   justify-content: center;
-  margin: 5px;
-  padding: 5px;
-}
-
-form input {
-  background-color: transparent;
-  border: 1px solid white;
-  color: white;
-  padding: 10px;
-}
-
-form select {
-  background-color: transparent;
-  border: none; /* Remove todas as bordas */
-  border-bottom: 1px solid white; /* Adiciona uma borda branca na parte inferior */
-  color: white;
-  gap: 10px;
-}
-
-form button {
-  background-color: transparent;
-  border: 1px solid white;
-  border-radius: 10px;
-  color: white;
-  padding: 10px;
 }
 
 
