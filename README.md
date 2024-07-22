@@ -1,9 +1,6 @@
 # Starwars-planets-search
 
-No Starwars-planets-search, foi desenvolvido uma lista com filtros de planetas do universo Star Wars usando Context API e Hooks para controlar os estados globais. 
-
-
-Neste projeto uso o **React** para a criação de componentes e utilizo **Context API** para gerenciar os estados da aplicação.
+No Starwars-planets-search, foi desenvolvido por meio do **React** uma lista com filtros de planetas do universo Star Wars, usando Context API e Hooks para controlar os estados globais. 
 
 Nesta aplicação, utilizei: 
 
